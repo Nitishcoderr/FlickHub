@@ -15,7 +15,15 @@
 - Created Redux Store with user Slice
 - Implemented Sign out feature
 - Update Profile 
-- Fetch movie from TMBD movie
+- Unsubscribed to the onAuthStateChanged callback
+- Fetched movie from TMBD movie
+- Create movie slice
+- Custom hook for now playing movies
+- Video background added
+- Fetched Data for trailer video
+- Update store with trailer video and make it auto play and mute
+- Main container completed
+
 
 
 # Feature
