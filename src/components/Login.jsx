@@ -2,13 +2,19 @@ import React, { useRef, useState } from 'react';
 import Header from './Header';
 import background from '../images/background.jpg';
 import { checkValidData } from '../utils/validate.js';
-import {  createUserWithEmailAndPassword,signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '../utils/firebase.js';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addUser } from '../utils/Slice/userSlice.js';
 
 const Login = () => {
   const [isSignInForm, setIsSignInForm] = useState(true);
   const [errorMessage, setErrorMessage] = useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
 
+  const name = useRef(null)
   const email = useRef(null);
   const password = useRef(null);
 
@@ -20,38 +26,46 @@ const Login = () => {
     // Validate the form data
     const message = checkValidData(email.current.value, password.current.value); // checkValidData from utils -> validate.js
     setErrorMessage(message);
-    if(message) return; // message === null then it will return
+    if (message) return; // message === null then it will return
 
     // SignIn & SignUp logic
-    if(!isSignInForm){
+    if (!isSignInForm) {
       // Sign up logic
-    createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
-  .then((userCredential) => {
-    // Signed up 
-    const user = userCredential.user;
-    console.log(user);
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    setErrorMessage(errorCode + "-" + errorMessage)
-  });
-    }else{
+      createUserWithEmailAndPassword(auth, email.current.value, password.current.value)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          updateProfile(user, {
+            displayName: name.current.value,
+             photoURL: "https://avatars.githubusercontent.com/u/122970690?s=400&u=e54405d2c257b7f2f7f21e53bc77a48748770c54&v=4"
+          }).then(() => {
+            const {uid,email,displayName,photoURL} = auth.currentUser;
+            dispatch(addUser({uid:uid,email:email,displayName:displayName,photoURL:photoURL}));
+            navigate('/browse')
+          }).catch((error) => {
+            setErrorMessage(error.message)
+          });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + '-' + errorMessage);
+        });
+    } else {
       // Sign In logic
       signInWithEmailAndPassword(auth, email.current.value, password.current.value)
-    .then((userCredential) => {
-    // Signed in 
-    const user = userCredential.user;
-    console.log(user);
-    // ...
-  })
-  .catch((error) => {
-    const errorCode = error.code;
-    const errorMessage = error.message;
-    setErrorMessage(errorCode + "-" + errorMessage) 
-  });
+        .then((userCredential) => {
+          // Signed in
+          const user = userCredential.user;
+          console.log(user);
+          navigate('/browse');
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + '-' + errorMessage);
+        });
     }
-
   };
 
   return (
@@ -70,6 +84,7 @@ const Login = () => {
         {!isSignInForm && (
           <input
             type="text"
+            ref={name}
             placeholder="Full Name"
             className="p-4 my-4 w-full bg-gray-800"
           />

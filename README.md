@@ -13,6 +13,9 @@
 - Create SignUp user account
 - Implemented SignIN user Api
 - Created Redux Store with user Slice
+- Implemented Sign out feature
+- Update Profile 
+- Fetch movie from TMBD movie
 
 
 # Feature
