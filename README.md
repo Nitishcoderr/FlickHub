@@ -16,13 +16,21 @@
 - Implemented Sign out feature
 - Update Profile 
 - Unsubscribed to the onAuthStateChanged callback
-- Fetched movie from TMBD movie
+- Fetched movie from TMDb movie
 - Create movie slice
 - Custom hook for now playing movies
 - Video background added
 - Fetched Data for trailer video
 - Update store with trailer video and make it auto play and mute
 - Main container completed
+- Build secondary component
+- Build Movie List
+- Build Movie card
+- GPT search header
+- GPT Search page
+- GPT SeARCH BAR
+- Multi language feature in app
+
 
 
 
