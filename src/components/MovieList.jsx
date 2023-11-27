@@ -8,7 +8,7 @@ const MovieList = ({ title, movies }) => {
   return (
     <div className='px-4'>
         <h1 className='text-3xl text-white'>{title}</h1>
-      <div className='flex overflow-x-scroll'>
+      <div className='flex overflow-x-auto'>
         <div className='flex'>
             {
                 movies.map((movie)=>(
